@@ -23,4 +23,7 @@ export default defineConfig({
   server: {
     host: true,
   },
+  esbuild: {
+    jsx: 'automatic',
+  },
 }) 

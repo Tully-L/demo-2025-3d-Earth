@@ -1,4 +1,4 @@
-import { MediaFile } from '../types';
+import type { MediaFile } from '../vite-env';
 
 export async function fetchGalleryContents(): Promise<MediaFile[]> {
   // Get all files from the public/gallery directory (img000.jpg to img129.jpg)

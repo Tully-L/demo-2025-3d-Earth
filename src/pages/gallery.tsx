@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import EarthGlobe from '../components/earth-globe';
 import { fetchGalleryContents } from '../utils/driveUtils';
-import { MediaFile } from '../types';
+import type { MediaFile } from '../vite-env';
 
 export default function Gallery() {
   const navigate = useNavigate();
