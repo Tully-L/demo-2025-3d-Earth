@@ -1,5 +1,5 @@
 [build]
-  command = "npm install && npm run build"
+  command = "npm install && npx vite build"
   publish = "dist"
 
 [build.environment]
@@ -7,6 +7,7 @@
   NPM_FLAGS = "--legacy-peer-deps"
   CI = "false"
   NODE_ENV = "production"
+  VITE_APP_TITLE = "Campus Demo"
 
 # Alternative build command if the main one fails
 [build.processing]

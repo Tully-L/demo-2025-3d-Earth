@@ -19,6 +19,7 @@ export default defineConfig({
         },
       },
     },
+    chunkSizeWarningLimit: 1000,
   },
   server: {
     host: true,
@@ -26,4 +27,10 @@ export default defineConfig({
   esbuild: {
     jsx: 'automatic',
   },
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react-router-dom', 'three', '@react-three/fiber', '@react-three/drei']
+  },
+  define: {
+    'process.env.NODE_ENV': '"production"'
+  }
 }) 
