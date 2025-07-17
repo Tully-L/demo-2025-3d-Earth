@@ -1,31 +1,81 @@
 import EarthGlobe from '../components/earth-globe';
+import CampusSelector from '../components/campus-selector';
+import { CampusLocation } from '../data/locations';
+import { Link } from 'react-router-dom';
 
 export default function Home() {
+  const handleCampusSelect = (campus: CampusLocation) => {
+    console.log('选择的校区:', campus);
+    // 这里可以添加跳转到地图页面或其他操作
+    // 例如: navigate(`/map/${campus.id}`);
+  };
+
   return (
-    <div className="min-h-screen bg-[#a8d8ff] flex flex-col">
+    <div 
+      className="min-h-screen flex flex-col relative"
+      style={{
+        background: 'linear-gradient(to bottom, #1e40af 0%, #1e3a8a 15%, #0891b2 30%, #0ea5e9 45%, #0284c7 60%, #0369a1 75%, #1e40af 90%, #3730a3 100%)'
+      }}
+    >
       {/* 左上角首页按钮 */}
-      <div className="fixed top-6 left-6 z-10">
-        <button className="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-lg">
-          Home
+      <div className="fixed top-6 left-6 z-[9999]">
+        <button className="px-6 py-4 bg-white/20 backdrop-blur-md border border-white/30 rounded-2xl shadow-lg hover:bg-white/30 transition-all duration-300 text-white text-lg font-medium">
+        🌍Home
         </button>
       </div>
       
       {/* 导航按钮 */}
-      <div className="fixed top-6 right-6 flex space-x-4 z-10">
-        <button className="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-lg">
-          About
-        </button>
-        <button className="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-lg">
-          Gallery
-        </button>
+      <div className="fixed top-6 right-6 flex space-x-4 z-[9999]">
+        <Link to="/about">
+          <button className="px-6 py-4 bg-white/20 backdrop-blur-md border border-white/30 rounded-2xl shadow-lg hover:bg-white/30 transition-all duration-300 text-white text-lg font-medium">
+            About
+          </button>
+        </Link>
+        <Link to="/gallery">
+          <button className="px-6 py-4 bg-white/20 backdrop-blur-md border border-white/30 rounded-2xl shadow-lg hover:bg-white/30 transition-all duration-300 text-white text-lg font-medium">
+            Gallery
+          </button>
+        </Link>
       </div>
       
       {/* 主内容区 */}
-      <div className="flex-grow flex flex-col items-center justify-center">
+      <div className="flex-grow flex flex-col items-center justify-center relative z-10">
         {/* 地球容器 - 更大的尺寸 */}
         <div className="w-full max-w-4xl h-[600px] relative">
-          <EarthGlobe />
+          <EarthGlobe>
+            {/* 在地球中间添加校区选择下拉框 */}
+            <CampusSelector 
+              onCampusSelect={handleCampusSelect}
+              className="z-50"
+            />
+          </EarthGlobe>
         </div>
+      </div>
+
+      {/* 底部滚动提示 */}
+      <div className="absolute bottom-0.5 left-1/2 transform -translate-x-1/2 z-10">
+        <Link to="/about">
+          <div className="flex flex-col items-center space-y-0.3 cursor-pointer group">
+            <p className="text-white/80 text-sm font-light tracking-wide group-hover:text-white transition-colors duration-300">
+              Scroll down to explore more
+            </p>
+            <div className="animate-bounce">
+              <svg 
+                className="w-8 h-8 text-white/70 group-hover:text-white transition-colors duration-300" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M7 10l5 5 5-5" 
+                />
+              </svg>
+            </div>
+          </div>
+        </Link>
       </div>
     </div>
   );
