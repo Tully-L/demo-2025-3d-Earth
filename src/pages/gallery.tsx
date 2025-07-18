@@ -4,6 +4,15 @@ import EarthGlobe from '../components/earth-globe';
 import { fetchGalleryContents } from '../utils/driveUtils';
 import type { MediaFile } from '../vite-env';
 
+// Utility function to shuffle an array (Fisher-Yates algorithm)
+function shuffleArray<T>(array: T[]): T {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
 export default function Gallery() {
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -47,7 +56,7 @@ export default function Gallery() {
           throw new Error('No media files found in the gallery');
         }
 
-        setMediaItems(items);
+        setMediaItems(shuffleArray(items));
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load media items');
         console.error('Error loading media items:', err);
