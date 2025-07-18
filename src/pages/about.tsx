@@ -44,18 +44,16 @@ export default function About() {
       }}
     >
       {/* Top Navigation Area */}
-      <div className="relative z-10">
-        {/* Home Button (Top Left) */}
-        <div className="fixed top-6 left-6">
+      <div className="relative z-50">
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 flex space-x-4">
+          {/* Home Button (Top Left) */}
           <Link to="/">
             <button className="px-6 py-4 bg-white/20 backdrop-blur-md border border-white/30 rounded-2xl shadow-lg hover:bg-white/30 transition-all duration-300 text-white text-lg font-medium">
               🌍Home
             </button>
           </Link>
-        </div>
-        
-        {/* Navigation Buttons (Top Right) */}
-        <div className="fixed top-6 right-6 flex space-x-4">
+          
+          {/* Navigation Buttons (Top Right) */}
           <button className="px-6 py-4 bg-white/30 backdrop-blur-md border border-white/40 rounded-2xl shadow-lg text-white text-lg font-medium">
             About
           </button>

@@ -105,20 +105,14 @@ export default function Map() {
       }}
     >
       {/* Earth Globe Thumbnail - Top Left */}
-      <div className="fixed top-6 left-6 z-[9999]">
+      <div className="fixed top-6 left-1/2 -translate-x-1/2 flex space-x-4 z-[9999]">
         <Link to="/">
-          <div className="w-16 h-16 bg-white/20 backdrop-blur-md border border-white/30 rounded-full shadow-lg hover:bg-white/30 transition-all duration-300 flex items-center justify-center cursor-pointer group">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-green-500 relative overflow-hidden">
-              <div className="absolute top-1 left-1 w-2 h-2 bg-green-600 rounded-full opacity-80"></div>
-              <div className="absolute bottom-1 right-1 w-3 h-1 bg-blue-600 rounded opacity-60"></div>
-              <div className="absolute top-3 right-2 w-1 h-1 bg-green-700 rounded-full"></div>
-            </div>
-          </div>
+          <button className="px-6 py-4 bg-white/20 backdrop-blur-md border border-white/30 rounded-2xl shadow-lg hover:bg-white/30 transition-all duration-300 text-white text-lg font-medium">
+            🌍Home
+          </button>
         </Link>
-      </div>
 
-      {/* Navigation - Top Right */}
-      <div className="fixed top-6 right-6 flex space-x-4 z-[9999]">
+        {/* Navigation - Top Right */}
         <Link to="/about">
           <button className="px-6 py-4 bg-white/20 backdrop-blur-md border border-white/30 rounded-2xl shadow-lg hover:bg-white/30 transition-all duration-300 text-gray-700 text-lg font-medium">
             About

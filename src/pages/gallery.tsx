@@ -29,6 +29,13 @@ export default function Gallery() {
   }, []);
 
   useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.play().catch(error => console.error("Audio play failed:", error));
+      setIsMusicPlaying(true);
+    }
+  }, []);
+
+  useEffect(() => {
     const loadMediaItems = async () => {
       try {
         setIsLoading(true);
@@ -129,16 +136,14 @@ export default function Gallery() {
       </div>
 
       {/* Navigation */}
-      <div className="fixed top-6 left-6 z-[9999]">
+      <div className="fixed top-6 left-1/2 -translate-x-1/2 flex space-x-4 z-[9999]">
         <Link to="/">
           <button className="px-6 py-3 bg-white/20 backdrop-blur-md border border-white/30 rounded-xl shadow-lg hover:bg-white/30 transition-all duration-300 text-white text-lg font-medium">
-            Home
+            🌍Home
           </button>
         </Link>
-      </div>
 
-      {/* Top Right Navigation */}
-      <div className="fixed top-6 right-6 flex space-x-4 z-[9999]">
+        {/* Top Right Navigation */}
         <Link to="/about">
           <button className="px-6 py-3 bg-white/20 backdrop-blur-md border border-white/30 rounded-xl shadow-lg hover:bg-white/30 transition-all duration-300 text-white text-lg font-medium">
             About

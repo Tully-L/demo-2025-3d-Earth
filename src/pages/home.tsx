@@ -17,15 +17,16 @@ export default function Home() {
         background: 'linear-gradient(to bottom, #1e40af 0%, #1e3a8a 15%, #0891b2 30%, #0ea5e9 45%, #0284c7 60%, #0369a1 75%, #1e40af 90%, #3730a3 100%)'
       }}
     >
-      {/* 左上角首页按钮 */}
-      <div className="fixed top-6 left-6 z-[9999]">
-        <button className="px-6 py-4 bg-white/20 backdrop-blur-md border border-white/30 rounded-2xl shadow-lg hover:bg-white/30 transition-all duration-300 text-white text-lg font-medium">
-        🌍Home
-        </button>
-      </div>
-      
-      {/* 导航按钮 */}
-      <div className="fixed top-6 right-6 flex space-x-4 z-[9999]">
+      {/* Top Navigation Area */}
+      <div className="fixed top-6 left-1/2 -translate-x-1/2 flex space-x-4 z-[9999]">
+        {/* Home Button (Top Left) */}
+        <Link to="/">
+          <button className="px-6 py-4 bg-white/20 backdrop-blur-md border border-white/30 rounded-2xl shadow-lg hover:bg-white/30 transition-all duration-300 text-white text-lg font-medium">
+            🌍Home
+          </button>
+        </Link>
+
+        {/* Navigation Buttons (Top Right) */}
         <Link to="/about">
           <button className="px-6 py-4 bg-white/20 backdrop-blur-md border border-white/30 rounded-2xl shadow-lg hover:bg-white/30 transition-all duration-300 text-white text-lg font-medium">
             About
@@ -37,7 +38,7 @@ export default function Home() {
           </button>
         </Link>
       </div>
-      
+
       {/* 主内容区 */}
       <div className="flex-grow flex flex-col items-center justify-center relative z-10">
         {/* 地球容器 - 更大的尺寸 */}
