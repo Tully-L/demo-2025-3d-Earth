@@ -147,18 +147,18 @@ export default function Gallery() {
       {/* Navigation */}
       <div className="fixed top-6 left-1/2 -translate-x-1/2 flex space-x-4 z-[9999]">
         <Link to="/">
-          <button className="px-6 py-3 bg-white/20 backdrop-blur-md border border-white/30 rounded-xl shadow-lg hover:bg-white/30 transition-all duration-300 text-white text-lg font-medium">
+          <button className="p-3 bg-white/20 backdrop-blur-md border border-white/30 rounded-xl shadow-md hover:bg-white/40 transition-all duration-300 text-white text-base font-medium">
             🌍Home
           </button>
         </Link>
 
         {/* Top Right Navigation */}
         <Link to="/about">
-          <button className="px-6 py-3 bg-white/20 backdrop-blur-md border border-white/30 rounded-xl shadow-lg hover:bg-white/30 transition-all duration-300 text-white text-lg font-medium">
+          <button className="p-3 bg-white/20 backdrop-blur-md border border-white/30 rounded-xl shadow-md hover:bg-white/40 transition-all duration-300 text-white text-base font-medium">
             About
           </button>
         </Link>
-        <button className="px-6 py-3 bg-white/30 backdrop-blur-md border border-white/40 rounded-xl shadow-lg text-white text-lg font-medium">
+        <button className="p-3 bg-white/30 backdrop-blur-md border border-white/40 rounded-xl shadow-md text-white text-base font-medium">
           Gallery
         </button>
       </div>
