@@ -107,14 +107,31 @@ export default function Map() {
       {/* Earth Globe Thumbnail - Top Left */}
       <div className="fixed top-6 inset-x-0 z-[9999]">
         <div className="flex justify-center md:justify-between items-center px-4">
-          <Link to="/">
-            <button className="p-3 bg-white/30 backdrop-blur-md border border-white/40 rounded-xl shadow-md transition-all duration-300 text-white text-sm font-medium focus:outline-none whitespace-nowrap">
-              🌍Home
-            </button>
-          </Link>
+          {/* Home Button (Left on Desktop, centered on Mobile) */}
+          <div className="flex space-x-4 md:space-x-0">
+            <Link to="/">
+              <button className="p-3 bg-white/30 backdrop-blur-md border border-white/40 rounded-xl shadow-md transition-all duration-300 text-white text-sm font-medium focus:outline-none whitespace-nowrap">
+                🌍Home
+              </button>
+            </Link>
 
-          {/* Navigation - Top Right */}
-          <div className="flex space-x-4">
+            {/* Navigation Buttons (Right on Desktop, centered on Mobile) */}
+            <div className="flex space-x-4 md:hidden">
+              <Link to="/about">
+                <button className="p-3 bg-white/20 backdrop-blur-md border border-white/30 rounded-xl shadow-md hover:bg-white/40 transition-all duration-300 text-white text-sm font-medium focus:outline-none whitespace-nowrap">
+                  About
+                </button>
+              </Link>
+              <Link to="/gallery">
+                <button className="p-3 bg-white/20 backdrop-blur-md border border-white/30 rounded-xl shadow-md hover:bg-white/40 transition-all duration-300 text-white text-sm font-medium focus:outline-none whitespace-nowrap">
+                  Gallery
+                </button>
+              </Link>
+            </div>
+          </div>
+
+          {/* Desktop Navigation Buttons */}
+          <div className="hidden md:flex space-x-4">
             <Link to="/about">
               <button className="p-3 bg-white/20 backdrop-blur-md border border-white/30 rounded-xl shadow-md hover:bg-white/40 transition-all duration-300 text-white text-sm font-medium focus:outline-none whitespace-nowrap">
                 About
