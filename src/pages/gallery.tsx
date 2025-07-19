@@ -5,12 +5,13 @@ import { fetchGalleryContents } from '../utils/driveUtils';
 import type { MediaFile } from '../vite-env';
 
 // Utility function to shuffle an array (Fisher-Yates algorithm)
-function shuffleArray<T>(array: T[]): T {
-  for (let i = array.length - 1; i > 0; i--) {
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
-  return array;
+  return shuffled;
 }
 
 export default function Gallery() {
@@ -21,6 +22,8 @@ export default function Gallery() {
   const [error, setError] = useState<string | null>(null);
   const [isFlipped, setIsFlipped] = useState(false);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
+  const [isMediaLoading, setIsMediaLoading] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const musicName = "Walk Alone - Zkaaai";
 
@@ -68,10 +71,34 @@ export default function Gallery() {
     loadMediaItems();
   }, []);
 
-  // Reset flip state when changing images
+  // Reset flip state when changing images and set initial media loading
   useEffect(() => {
     setIsFlipped(false);
-  }, [currentIndex]);
+    if (mediaItems.length > 0) {
+      setIsMediaLoading(true);
+    }
+  }, [currentIndex, mediaItems.length]);
+
+  // Preload next and previous images
+  useEffect(() => {
+    if (mediaItems.length === 0) return;
+    
+    const preloadImage = (index: number) => {
+      const item = mediaItems[index];
+      if (item?.type === 'image') {
+        const img = new Image();
+        img.src = item.url;
+      }
+    };
+
+    // Preload next image
+    const nextIndex = (currentIndex + 1) % mediaItems.length;
+    preloadImage(nextIndex);
+    
+    // Preload previous image
+    const prevIndex = (currentIndex - 1 + mediaItems.length) % mediaItems.length;
+    preloadImage(prevIndex);
+  }, [currentIndex, mediaItems]);
 
   const toggleMusic = () => {
     if (!audioRef.current) return;
@@ -98,10 +125,36 @@ export default function Gallery() {
     }
   };
 
+  const handleNavigation = (direction: 'prev' | 'next') => {
+    if (isNavigating) return;
+    
+    setIsNavigating(true);
+    setIsMediaLoading(true);
+    
+    setCurrentIndex((prev) => {
+      if (direction === 'prev') {
+        return (prev - 1 + mediaItems.length) % mediaItems.length;
+      } else {
+        return (prev + 1) % mediaItems.length;
+      }
+    });
+    
+    // Reset navigation lock after a short delay
+    setTimeout(() => {
+      setIsNavigating(false);
+      setIsMediaLoading(false);
+    }, 300);
+  };
+
   // Handle media loading errors
   const handleMediaError = (e: React.SyntheticEvent<HTMLImageElement | HTMLVideoElement>) => {
     const target = e.target as HTMLImageElement | HTMLVideoElement;
     console.error('Error loading media:', target.src);
+  };
+
+  // Handle media loading
+  const handleMediaLoad = () => {
+    setIsMediaLoading(false);
   };
 
   if (isLoading) {
@@ -187,14 +240,21 @@ export default function Gallery() {
         <div className="relative w-full max-w-4xl aspect-[16/9] perspective-1000">
           {/* Media Card Container */}
           <div 
-            className={`relative w-full h-full transform-style-3d transition-transform duration-700 ${isFlipped ? 'rotate-y-180' : ''}`}
+            className={`relative w-full h-full transform-style-3d transition-transform duration-700 will-change-transform ${isFlipped ? 'rotate-y-180' : ''}`}
+            style={{ transformStyle: 'preserve-3d' }}
           >
             {/* Front Side (Image/Video) */}
             <div 
               className="absolute inset-0 w-full h-full backface-hidden cursor-pointer"
+              style={{ backfaceVisibility: 'hidden' }}
               onClick={handleFrontClick}
             >
-              <div className="w-full h-full rounded-2xl overflow-hidden bg-white/10 backdrop-blur-md border border-white/20">
+              <div className="w-full h-full rounded-2xl overflow-hidden bg-white/10 backdrop-blur-md border border-white/20 relative">
+                {isMediaLoading && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-10">
+                    <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  </div>
+                )}
                 {mediaItems[currentIndex]?.type === 'video' ? (
                   <video
                     src={mediaItems[currentIndex].url}
@@ -204,6 +264,8 @@ export default function Gallery() {
                     muted
                     loop
                     onError={handleMediaError}
+                    onLoadedData={handleMediaLoad}
+                    preload="metadata"
                   />
                 ) : (
                   <img 
@@ -211,6 +273,8 @@ export default function Gallery() {
                     alt={mediaItems[currentIndex].name}
                     className="w-full h-full object-cover"
                     onError={handleMediaError}
+                    onLoad={handleMediaLoad}
+                    loading="eager"
                   />
                 )}
               </div>
@@ -219,6 +283,7 @@ export default function Gallery() {
             {/* Back Side */}
             <div 
               className="absolute inset-0 w-full h-full backface-hidden rotate-y-180 cursor-pointer"
+              style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
               onClick={handleBackClick}
             >
               <div className="w-full h-full rounded-2xl overflow-hidden bg-white/20 backdrop-blur-lg flex items-center justify-center">
@@ -235,9 +300,11 @@ export default function Gallery() {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  setCurrentIndex((prev) => (prev - 1 + mediaItems.length) % mediaItems.length);
+                  handleNavigation('prev');
                 }}
-                className="absolute left-4 top-1/2 -translate-y-1/2 z-20 text-white bg-black/50 rounded-full p-3 hover:bg-black/70 transition-colors"
+                disabled={isNavigating}
+                className={`absolute left-4 top-1/2 -translate-y-1/2 z-20 text-white bg-black/50 rounded-full p-3 hover:bg-black/70 transition-colors ${isNavigating ? 'opacity-50 cursor-not-allowed' : ''} touch-manipulation`}
+                style={{ minWidth: '48px', minHeight: '48px' }}
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -246,9 +313,11 @@ export default function Gallery() {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  setCurrentIndex((prev) => (prev + 1) % mediaItems.length);
+                  handleNavigation('next');
                 }}
-                className="absolute right-4 top-1/2 -translate-y-1/2 z-20 text-white bg-black/50 rounded-full p-3 hover:bg-black/70 transition-colors"
+                disabled={isNavigating}
+                className={`absolute right-4 top-1/2 -translate-y-1/2 z-20 text-white bg-black/50 rounded-full p-3 hover:bg-black/70 transition-colors ${isNavigating ? 'opacity-50 cursor-not-allowed' : ''} touch-manipulation`}
+                style={{ minWidth: '48px', minHeight: '48px' }}
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
