@@ -105,24 +105,28 @@ export default function Map() {
       }}
     >
       {/* Earth Globe Thumbnail - Top Left */}
-      <div className="fixed top-6 left-1/2 -translate-x-1/2 flex space-x-4 z-[9999]">
-        <Link to="/">
-          <button className="p-3 bg-white/30 backdrop-blur-md border border-white/40 rounded-xl shadow-md transition-all duration-300 text-white text-base font-medium">
-            🌍Home
-          </button>
-        </Link>
+      <div className="fixed top-6 inset-x-0 z-[9999]">
+        <div className="flex justify-center md:justify-between items-center px-4">
+          <Link to="/">
+            <button className="p-3 bg-white/30 backdrop-blur-md border border-white/40 rounded-xl shadow-md transition-all duration-300 text-white text-sm font-medium focus:outline-none whitespace-nowrap">
+              🌍Home
+            </button>
+          </Link>
 
-        {/* Navigation - Top Right */}
-        <Link to="/about">
-          <button className="p-3 bg-white/20 backdrop-blur-md border border-white/30 rounded-xl shadow-md hover:bg-white/40 transition-all duration-300 text-white text-base font-medium">
-            About
-          </button>
-        </Link>
-        <Link to="/gallery">
-          <button className="p-3 bg-white/20 backdrop-blur-md border border-white/30 rounded-xl shadow-md hover:bg-white/40 transition-all duration-300 text-white text-base font-medium">
-            Gallery
-          </button>
-        </Link>
+          {/* Navigation - Top Right */}
+          <div className="flex space-x-4">
+            <Link to="/about">
+              <button className="p-3 bg-white/20 backdrop-blur-md border border-white/30 rounded-xl shadow-md hover:bg-white/40 transition-all duration-300 text-white text-sm font-medium focus:outline-none whitespace-nowrap">
+                About
+              </button>
+            </Link>
+            <Link to="/gallery">
+              <button className="p-3 bg-white/20 backdrop-blur-md border border-white/30 rounded-xl shadow-md hover:bg-white/40 transition-all duration-300 text-white text-sm font-medium focus:outline-none whitespace-nowrap">
+                Gallery
+              </button>
+            </Link>
+          </div>
+        </div>
       </div>
 
       {/* Map Info Panel - Only show for non-Google Maps view */}
