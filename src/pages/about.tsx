@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import emailjs from 'emailjs-com';
 
 export default function About() {
   const [comment, setComment] = useState('');
@@ -24,16 +25,37 @@ export default function About() {
     }
   };
 
+  const SERVICE_ID = 'service_xbb27at';
+  const TEMPLATE_ID = 'template_3q14mzp';
+  const PUBLIC_KEY = 'ENd8UrcCIDXOb_7i_';
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    setTimeout(() => {
-      alert('Thank you! Your message has been sent to ecofairuwc@gmail.com');
+
+    // Prompt for optional contact email
+    let contactEmail = window.prompt(
+      'Would you like to provide an email address where you can be contacted? (Optional)\nLeave blank and press OK to skip.'
+    );
+    if (contactEmail === null) contactEmail = '';
+
+    try {
+      await emailjs.send(
+        SERVICE_ID,
+        TEMPLATE_ID,
+        {
+          message: comment,
+          contact_email: contactEmail ? contactEmail : 'No contact email provided',
+        },
+        PUBLIC_KEY
+      );
+      alert('Your story has been sent successfully!');
       setComment('');
       setPhotoPreview(null);
-      setIsSubmitting(false);
-    }, 1000);
+    } catch (err) {
+      alert('Failed to send. Please try again later.');
+    }
+    setIsSubmitting(false);
   };
 
   return (
